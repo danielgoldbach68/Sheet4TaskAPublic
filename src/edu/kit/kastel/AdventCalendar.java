@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
+/**
+ * This is Advent Calendar.
+ * @author uovsd
+ *
+ * @param <T>
+ */
 public class AdventCalendar<T extends Copyable<T>> implements CountdownCalendar<T> {
 
     private static final int DOORS_PER_LINE = 4;
     private static final String DOOR_REPRESENTATION_FORMAT = "[%s]";
-    private static final String CANDY_REPRESENTATION_FORMAT = "%dx%s";
     private static final String EMPTY_DOOR_CONTENT = "   ";
 
     private int currentDay;
@@ -22,7 +27,13 @@ public class AdventCalendar<T extends Copyable<T>> implements CountdownCalendar<
      * All doors are closed by default.
      */
     private boolean[] doors;
-    
+
+    /**
+     * Constructs AdventCalendar.
+     *
+     * @param candies individual Generic candy
+     */
+
     public AdventCalendar(List<T> candies) {
         this.backup = new ArrayList<>(candies);
         reset();
@@ -32,10 +43,10 @@ public class AdventCalendar<T extends Copyable<T>> implements CountdownCalendar<
         this.currentDay = 0;
 
     }
-    
+
     /**
      * Returns the current day.
-     * 
+     *
      * @return the current day
      */
     @Override
@@ -54,11 +65,11 @@ public class AdventCalendar<T extends Copyable<T>> implements CountdownCalendar<
 
     @Override
     public void nextDays(int days) {
-       if (days < 1 || this.currentDay + days > maxDays) {
-        throw new IllegalArgumentException("");
-       } else {
-        this.currentDay += days;
-       }
+        if (days < 1 || this.currentDay + days > maxDays) {
+            throw new IllegalArgumentException("");
+        } else {
+            this.currentDay += days;
+        }
     }
 
     @Override
@@ -90,12 +101,9 @@ public class AdventCalendar<T extends Copyable<T>> implements CountdownCalendar<
         List<T> openedCandies = new ArrayList<>();
         for (Integer number : numbers) {
 
-            //try {
-        openedCandies.add(openDoor(number)); //TODO wenn artemis fehler uncomment line below and oabeove and fix formatting
-            //} catch (IllegalArgumentException | IllegalStateException e) {
-            //    continue;
-            //}
-            
+
+            openedCandies.add(openDoor(number));
+
         }
 
         return openedCandies;
@@ -103,13 +111,13 @@ public class AdventCalendar<T extends Copyable<T>> implements CountdownCalendar<
 
     @Override
     public int numberOfUnopenedDoors() {
-       int count = 0;
-       for (int i = 0; i < this.currentDay; i++) {
-        if (!this.doors[i]) {
-            count++;
+        int count = 0;
+        for (int i = 0; i < this.currentDay; i++) {
+            if (!this.doors[i]) {
+                count++;
+            }
         }
-    }
-    return count;
+        return count;
     }
 
     @Override
@@ -121,7 +129,7 @@ public class AdventCalendar<T extends Copyable<T>> implements CountdownCalendar<
 
     private List<T> copyCandyList(List<T> toCopy) {
         List<T> copy = new ArrayList<>();
-        for (T candy: toCopy) {
+        for (T candy : toCopy) {
             copy.add(candy.copy());
         }
         return copy;
@@ -135,10 +143,9 @@ public class AdventCalendar<T extends Copyable<T>> implements CountdownCalendar<
             if (this.doors[i]) {
                 currentLine.append(DOOR_REPRESENTATION_FORMAT.formatted(EMPTY_DOOR_CONTENT));
             } else {
-                currentLine.append(DOOR_REPRESENTATION_FORMAT.formatted(CANDY_REPRESENTATION_FORMAT
-                        .formatted(this.candies.get(i).toString())));
+                currentLine.append(DOOR_REPRESENTATION_FORMAT.formatted(this.candies.get(i).toString()));
             }
-            
+
             if (i % DOORS_PER_LINE == DOORS_PER_LINE - 1) {
                 lines.add(currentLine.toString());
                 currentLine.setLength(0);
